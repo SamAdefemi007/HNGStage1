@@ -2,13 +2,42 @@ const express = require("express");
 
 const app = express();
 const PORT = 8080;
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json({
+app.post("/", (req, res) => {
+  let { operation_type, x, y } = req.body;
+  let result;
+  if (x && y) {
+    x = parseInt(x);
+    y = parseInt(y);
+    operation_type = operation_type.trim().toLowerCase();
+    switch (operation_type) {
+      case "addition":
+      case "add":
+      case "plus":
+      case "+":
+        result = x + y;
+        break;
+
+      case "subtraction":
+      case "subtract":
+      case "minus":
+      case "-":
+        result = x - y;
+        break;
+
+      case "multiplication":
+      case "multiply":
+      case "times":
+      case "*":
+        result = x * y;
+        break;
+    }
+  }
+  res.send({
     slackUsername: "SamAdefemi",
-    backend: true,
-    age: 27,
-    bio: "I am a software developer currently enrolled in an MSc program in Information Technology at the University of Aberdeen. I am comfortable with a range of programming languages and tools and i enrolled into this program to get more hands-on experience",
+    operation_type: operation_type,
+    result: result,
   });
 });
 
